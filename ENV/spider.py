@@ -26,7 +26,7 @@ def query_google(params):
 def get_search_links(search_results):
 
     for result in search_results.body.find_all("a"):
-        print(result.get("href"))
+        print(result.body)
 
 
 
