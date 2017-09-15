@@ -3,6 +3,7 @@ import re
 import requests
 import json
 from bs4 import BeautifulSoup
+import os
 
 def print_greeting():
     print("Crawler running....")
@@ -15,7 +16,7 @@ def query_google(params):
     google = "https://www.google.com.sg/search"
     # Spoofs a browser visit that times out after 5 sec(no reply within 5 sec)
     r = requests.get(google, headers=user_agent, params=search_term, timeout=5.0)
-    print(r.request.url)
+    print("Searching " + r.request.url + "....\n")
     google_results = r.text.encode("utf-8")
     soup = BeautifulSoup(google_results, "html.parser")
     # Write to file
@@ -25,10 +26,15 @@ def query_google(params):
 
 def get_search_links(search_results):
 
-    for result in search_results.body.find_all("a"):
-        print(result.body)
+    results = set()
 
-
+    for result in search_results.body.find_all("h3", class_="r"):
+        # for each <h3 class='r'> tag, find the <a> tag and get the href value
+        results.add(result.find("a").get("href"))
+    # Write set of search links to file
+    with open("googlelinks.txt", "a") as f:
+        for result in results:
+            f.write(result + "\n")
 
 
 if __name__ == "__main__":
