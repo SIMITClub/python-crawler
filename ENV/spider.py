@@ -5,7 +5,7 @@ import json
 from bs4 import BeautifulSoup
 import os
 import math
-
+# TEST
 def print_greeting():
     print("Crawler running....")
     # Replace any spaces in the directory name with underscores
